@@ -461,6 +461,15 @@
     <a href="https://cal.com/royalpaw-royalpaw-nyu6cz" target="_blank" class="calendly-btn" style="max-width:360px;margin:1.5rem auto 1rem;">
       📅 Reservar mi cita ahora
     </a>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdxj0nyMGlnmfZaHGNavvAtsHJQPgx5Opbapyp7u3y0bQrZEA/viewform" target="_blank"
+       style="display:inline-flex;align-items:center;justify-content:center;gap:10px;
+              margin:0.8rem auto 1rem;max-width:360px;width:100%;padding:14px 24px;
+              background:rgba(201,162,39,0.1);border:1px solid rgba(201,162,39,0.4);
+              color:var(--gold);border-radius:10px;text-decoration:none;
+              font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;
+              letter-spacing:2px;text-transform:uppercase;">
+      📋 También puedes completar tu ficha en Google Forms
+    </a>
     <a href="https://wa.me/17867905405?text=Hola%20Royal%20Paw%2C%20tengo%20una%20consulta%20%F0%9F%90%BE" class="wa-link" style="max-width:360px;margin:0 auto;" target="_blank">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 2C6.486 2 2 6.486 2 12c0 1.862.514 3.604 1.406 5.097L2 22l4.983-1.388A9.944 9.944 0 0012 22c5.514 0 10-4.486 10-10S17.514 2 12 2zm0 18.154a8.12 8.12 0 01-4.142-1.131l-.298-.176-3.075.854.877-3.004-.194-.309A8.087 8.087 0 013.846 12c0-4.497 3.657-8.154 8.154-8.154 4.497 0 8.154 3.657 8.154 8.154 0 4.497-3.657 8.154-8.154 8.154z"/></svg>
       💬 ¿Tienes alguna pregunta? Chatea con nosotros
@@ -567,27 +576,22 @@
     formData.forEach((v, k) => { jsonData[k] = v; });
 
     // Enviar a Google Sheets via form-encoded (más confiable)
-    // Enviar directo a Google Sheets
+    // Guardar en localStorage como backup
+    try { localStorage.setItem('rp_last_' + Date.now(), JSON.stringify(jsonData)); } catch(e) {}
+    
+    // Mostrar pantalla de éxito
+    form.closest('.form-section').style.display = 'none';
+    document.getElementById('successScreen').style.display = 'block';
+    document.querySelector('.selector-card').style.display = 'none';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    // Enviar a Sheets en background
     fetch(SHEETS_URL, {
       method: 'POST',
+      mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(jsonData)
-    }).then(r => r.json()).then(data => {
-      if (data.result === 'ok' || data.status === 'ok') {
-        form.closest('.form-section').style.display = 'none';
-        document.getElementById('successScreen').style.display = 'block';
-        document.querySelector('.selector-card').style.display = 'none';
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else {
-        alert('Error al enviar. Escríbenos por WhatsApp al (786) 790-5405.');
-      }
-    }).catch(() => {
-      // Si hay error CORS igual mostramos éxito porque no-cors no permite leer respuesta
-      form.closest('.form-section').style.display = 'none';
-      document.getElementById('successScreen').style.display = 'block';
-      document.querySelector('.selector-card').style.display = 'none';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+    }).catch(() => {});
   });
 
   // ── Submit solo cita ──────────────────────────
@@ -599,26 +603,19 @@
     formData.forEach((v, k) => { jsonData[k] = v; });
 
     // Enviar a Google Sheets via form-encoded
-    // Enviar directo a Google Sheets
+    // Mostrar pantalla de éxito
+    form.closest('.form-section').style.display = 'none';
+    document.getElementById('successScreen').style.display = 'block';
+    document.querySelector('.selector-card').style.display = 'none';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    // Enviar a Sheets en background
     fetch(SHEETS_URL, {
       method: 'POST',
+      mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(jsonData)
-    }).then(r => r.json()).then(data => {
-      if (data.result === 'ok' || data.status === 'ok') {
-        form.closest('.form-section').style.display = 'none';
-        document.getElementById('successScreen').style.display = 'block';
-        document.querySelector('.selector-card').style.display = 'none';
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else {
-        alert('Error al enviar. Escríbenos por WhatsApp al (786) 790-5405.');
-      }
-    }).catch(() => {
-      form.closest('.form-section').style.display = 'none';
-      document.getElementById('successScreen').style.display = 'block';
-      document.querySelector('.selector-card').style.display = 'none';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+    }).catch(() => {});
   });
 </script>
 </body>
