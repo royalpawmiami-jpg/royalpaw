@@ -172,6 +172,12 @@
     <div class="header-divider"></div>
     <div class="header-tagline">Royal Paw Spa & Grooming</div>
     <div class="header-sub">El arte de consentir con clase</div>
+    <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:1rem;">
+      <span style="font-size:10px;letter-spacing:1px;color:var(--gold-dim);border:0.5px solid var(--border);border-radius:20px;padding:4px 12px;">✂️ Peluquería Premium</span>
+      <span style="font-size:10px;letter-spacing:1px;color:var(--gold-dim);border:0.5px solid var(--border);border-radius:20px;padding:4px 12px;">🛍️ Boutique & Accesorios</span>
+      <span style="font-size:10px;letter-spacing:1px;color:var(--gold-dim);border:0.5px solid var(--border);border-radius:20px;padding:4px 12px;">🐕 Dog Walking</span>
+      <span style="font-size:10px;letter-spacing:1px;color:var(--gold-dim);border:0.5px solid var(--border);border-radius:20px;padding:4px 12px;">🏡 Boarding</span>
+    </div>
     <div class="header-divider"></div>
   </div>
 
@@ -245,13 +251,39 @@
           <div class="field"><label>Color de pelaje</label><input type="text" name="pet_color" placeholder="Blanco"></div>
           <div class="field full"><label>Estilo de corte preferido</label><input type="text" name="pet_cut" placeholder="Corte cachorro, largo en orejas…"></div>
           <div class="field full"><label>Condición especial / Notas</label><textarea name="pet_notes" placeholder="Alergias, medicamentos, comportamiento especial…"></textarea></div>
+          <div class="field full"><label>Servicio de interés</label>
+            <select name="appointment_service">
+              <option value="">Seleccionar servicio</option>
+              <optgroup label="I · Peluquería Premium">
+                <option>Peluquería Premium — Grooming completo (baño, corte y secado)</option>
+                <option>Peluquería Premium — Baño y secado</option>
+                <option>Peluquería Premium — Corte únicamente</option>
+                <option>Peluquería Premium — Tratamiento de pelaje</option>
+                <option>Peluquería Premium — Corte de uñas</option>
+              </optgroup>
+              <optgroup label="II · Boutique & Accesorios">
+                <option>Boutique & Accesorios — Asesoría y compra</option>
+                <option>Boutique & Accesorios — Entrega de pedido</option>
+              </optgroup>
+              <optgroup label="III · Dog Walking">
+                <option>Dog Walking — Paseo 1h 30min</option>
+                <option>Dog Walking — Paseo grupal</option>
+              </optgroup>
+              <optgroup label="IV · Boarding">
+                <option>Boarding — Por noche</option>
+                <option>Boarding — Fin de semana</option>
+                <option>Boarding — Por semana</option>
+                <option>Boarding — Personalizado</option>
+              </optgroup>
+            </select>
+          </div>
         </div>
       </div>
 
       <!-- 03 MEMBRESÍA VIP -->
       <div class="card">
         <div class="section-title"><span class="section-num">03</span>Membresía VIP</div>
-        <p style="font-size:13px;color:var(--text-muted);margin-bottom:1.2rem;line-height:1.6;">Selecciona el plan que mejor se adapte a tu mascota. El precio varía por tamaño.</p>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:1.2rem;line-height:1.6;">Selecciona el plan que mejor se adapte a tu mascota. Aplica para <strong style="color:var(--gold);">Peluquería Premium y Dog Walking</strong>. El precio varía por tamaño.</p>
         <div class="plan-grid" id="planGrid_reg">
           <div class="plan-card" id="plan_reg_no" onclick="selectPlan('reg','no')">
             <div class="plan-icon">🐾</div>
@@ -380,6 +412,32 @@
           <div class="field full"><label>Indicaciones especiales para esta cita <span style="color:var(--gold-dim);font-size:9px;">(opcional)</span></label>
             <textarea name="pet_notes" placeholder="Corte más corto esta vez, está sensible en las patas…"></textarea>
           </div>
+          <div class="field full"><label>Servicio solicitado</label>
+            <select name="appointment_service" required>
+              <option value="">Seleccionar servicio</option>
+              <optgroup label="I · Peluquería Premium">
+                <option>Peluquería Premium — Grooming completo (baño, corte y secado)</option>
+                <option>Peluquería Premium — Baño y secado</option>
+                <option>Peluquería Premium — Corte únicamente</option>
+                <option>Peluquería Premium — Tratamiento de pelaje</option>
+                <option>Peluquería Premium — Corte de uñas</option>
+              </optgroup>
+              <optgroup label="II · Boutique & Accesorios">
+                <option>Boutique & Accesorios — Asesoría y compra</option>
+                <option>Boutique & Accesorios — Entrega de pedido</option>
+              </optgroup>
+              <optgroup label="III · Dog Walking">
+                <option>Dog Walking — Paseo 1h 30min</option>
+                <option>Dog Walking — Paseo grupal</option>
+              </optgroup>
+              <optgroup label="IV · Boarding">
+                <option>Boarding — Por noche</option>
+                <option>Boarding — Fin de semana</option>
+                <option>Boarding — Por semana</option>
+                <option>Boarding — Personalizado</option>
+              </optgroup>
+            </select>
+          </div>
         </div>
       </div>
 
@@ -402,7 +460,7 @@
           <div class="memb-option" id="memb_want" onclick="selectMemb('want')">
             <div class="memb-icon">⭐</div>
             <div class="memb-label">Quiero ser VIP</div>
-            <div class="memb-desc">Me interesa activarla</div>
+            <div class="memb-desc">Me interesa activarla para Peluquería o Dog Walking</div>
             <div class="memb-check" id="mc_want"></div>
           </div>
         </div>
