@@ -481,6 +481,34 @@
 
 <script>
   const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbw7UDDXB4zdy2PyM8dnnZiqgcI9H6x3b7MH86UTDNGZ4ZKQKjgQWZ7U0pgJPnvnjUJHTQ/exec';
+  const GFORM_BASE = 'https://docs.google.com/forms/d/e/1FAIpQLSdxj0nyMGlnmfZaHGNavvAtsHJQPgx5Opbapyp7u3y0bQrZEA/formResponse';
+
+  function submitToGoogleForms(data) {
+    const params = new URLSearchParams({
+      'entry.118952912': data.owner_first || data.owner_name || '',
+      'entry.1757585473': data.owner_last || '',
+      'entry.1704823403': data.email || '',
+      'entry.1565960607': data.phone || '',
+      'entry.2012893217': data.zip || '',
+      'entry.1586073247': data.pet_name || '',
+      'entry.1869510540': data.pet_species || '',
+      'entry.394418672': data.pet_breed || '',
+      'entry.709279738': data.pet_age || '',
+      'entry.1935542016': data.pet_weight || '',
+      'entry.554968216': data.pet_sex || '',
+      'entry.2075094100': data.pet_neutered || '',
+      'entry.232966968': data.pet_color || '',
+      'entry.2019076696': data.pet_cut || '',
+      'entry.1548417476': data.pet_notes || '',
+      'entry.1305505566': data.plan_seleccionado || data.membresia_cliente || ''
+    });
+    fetch(GFORM_BASE, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: params.toString()
+    }).catch(() => {});
+  }
   const VIP_PRICES = { pequeno: 89, mediano: 119, grande: 149 };
 
   let tipoActual = null;
@@ -585,7 +613,8 @@
     document.querySelector('.selector-card').style.display = 'none';
     window.scrollTo({ top: 0, behavior: 'smooth' });
     
-    // Enviar a Sheets en background
+    // Enviar a Google Forms + Sheets en background
+    submitToGoogleForms(jsonData);
     fetch(SHEETS_URL, {
       method: 'POST',
       mode: 'no-cors',
@@ -609,7 +638,8 @@
     document.querySelector('.selector-card').style.display = 'none';
     window.scrollTo({ top: 0, behavior: 'smooth' });
     
-    // Enviar a Sheets en background
+    // Enviar a Google Forms + Sheets en background
+    submitToGoogleForms(jsonData);
     fetch(SHEETS_URL, {
       method: 'POST',
       mode: 'no-cors',
