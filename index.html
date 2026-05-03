@@ -455,8 +455,9 @@
     <div style="font-family:'Cormorant Garamond',serif;font-size:30px;color:var(--gold);margin-bottom:1rem;">¡Datos recibidos!</div>
     <div class="header-divider"></div>
     <p style="font-size:14px;color:var(--text-muted);line-height:1.8;max-width:400px;margin:1rem auto;">
-      Tus datos fueron guardados con éxito. ✦<br><br>
-      Ahora reserva tu cita eligiendo el día y la hora que prefieras.
+      ¡Registro recibido! ✦<br><br>
+      En unos segundos se abrirá una ventana para confirmar tus datos.<br><br>
+      Si no se abre automáticamente toca el botón de abajo.
     </p>
     <a href="https://cal.com/royalpaw-royalpaw-nyu6cz" target="_blank" class="calendly-btn" style="max-width:360px;margin:1.5rem auto 1rem;">
       📅 Reservar mi cita ahora
@@ -468,8 +469,11 @@
               color:var(--gold);border-radius:10px;text-decoration:none;
               font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;
               letter-spacing:2px;text-transform:uppercase;">
-      📋 También puedes completar tu ficha en Google Forms
+      📋 Confirmar mis datos en Google Forms
     </a>
+    <p style="font-size:11px;color:var(--gold-dim);margin-top:0.5rem;">
+      (Tus datos se abrirán precargados — solo toca Enviar)
+    </p>
     <a href="https://wa.me/17867905405?text=Hola%20Royal%20Paw%2C%20tengo%20una%20consulta%20%F0%9F%90%BE" class="wa-link" style="max-width:360px;margin:0 auto;" target="_blank">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 2C6.486 2 2 6.486 2 12c0 1.862.514 3.604 1.406 5.097L2 22l4.983-1.388A9.944 9.944 0 0012 22c5.514 0 10-4.486 10-10S17.514 2 12 2zm0 18.154a8.12 8.12 0 01-4.142-1.131l-.298-.176-3.075.854.877-3.004-.194-.309A8.087 8.087 0 013.846 12c0-4.497 3.657-8.154 8.154-8.154 4.497 0 8.154 3.657 8.154 8.154 0 4.497-3.657 8.154-8.154 8.154z"/></svg>
       💬 ¿Tienes alguna pregunta? Chatea con nosotros
@@ -603,24 +607,37 @@
     const jsonData = {};
     formData.forEach((v, k) => { jsonData[k] = v; });
 
-    // Enviar a Google Sheets via form-encoded (más confiable)
-    // Guardar en localStorage como backup
-    try { localStorage.setItem('rp_last_' + Date.now(), JSON.stringify(jsonData)); } catch(e) {}
-    
+    // Construir URL de Google Form con datos precargados
+    const gformUrl = new URL('https://docs.google.com/forms/d/e/1FAIpQLSdxj0nyMGlnmfZaHGNavvAtsHJQPgx5Opbapyp7u3y0bQrZEA/viewform');
+    gformUrl.searchParams.set('entry.118952912', jsonData.owner_first || '');
+    gformUrl.searchParams.set('entry.1757585473', jsonData.owner_last || '');
+    gformUrl.searchParams.set('entry.1704823403', jsonData.email || '');
+    gformUrl.searchParams.set('entry.1565960607', jsonData.phone || '');
+    gformUrl.searchParams.set('entry.2012893217', jsonData.zip || '');
+    gformUrl.searchParams.set('entry.1586073247', jsonData.pet_name || '');
+    gformUrl.searchParams.set('entry.1869510540', jsonData.pet_species || '');
+    gformUrl.searchParams.set('entry.394418672', jsonData.pet_breed || '');
+    gformUrl.searchParams.set('entry.709279738', jsonData.pet_age || '');
+    gformUrl.searchParams.set('entry.1935542016', jsonData.pet_weight || '');
+    gformUrl.searchParams.set('entry.554968216', jsonData.pet_sex || '');
+    gformUrl.searchParams.set('entry.2075094100', jsonData.pet_neutered || '');
+    gformUrl.searchParams.set('entry.232966968', jsonData.pet_color || '');
+    gformUrl.searchParams.set('entry.2019076696', jsonData.pet_cut || '');
+    gformUrl.searchParams.set('entry.1548417476', jsonData.pet_notes || '');
+    gformUrl.searchParams.set('entry.1305505566', jsonData.plan_seleccionado || '');
+
     // Mostrar pantalla de éxito
     form.closest('.form-section').style.display = 'none';
     document.getElementById('successScreen').style.display = 'block';
     document.querySelector('.selector-card').style.display = 'none';
+
+    // Actualizar botón de Google Form con URL precargada
+    const gformBtns = document.querySelectorAll('a[href*="1FAIpQLSd"]');
+    gformBtns.forEach(btn => btn.href = gformUrl.toString());
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    
-    // Enviar a Google Forms + Sheets en background
-    submitToGoogleForms(jsonData);
-    fetch(SHEETS_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(jsonData)
-    }).catch(() => {});
+    // Abrir Google Form automáticamente después de 2 segundos
+    setTimeout(() => { window.open(gformUrl.toString(), '_blank'); }, 2000);
   });
 
   // ── Submit solo cita ──────────────────────────
@@ -631,21 +648,28 @@
     const jsonData = {};
     formData.forEach((v, k) => { jsonData[k] = v; });
 
-    // Enviar a Google Sheets via form-encoded
+    // Construir URL de Google Form con datos precargados
+    const gformUrl2 = new URL('https://docs.google.com/forms/d/e/1FAIpQLSdxj0nyMGlnmfZaHGNavvAtsHJQPgx5Opbapyp7u3y0bQrZEA/viewform');
+    gformUrl2.searchParams.set('entry.118952912', jsonData.owner_name || '');
+    gformUrl2.searchParams.set('entry.1565960607', jsonData.phone || '');
+    gformUrl2.searchParams.set('entry.1586073247', jsonData.pet_name || '');
+    gformUrl2.searchParams.set('entry.1869510540', jsonData.pet_species || '');
+    gformUrl2.searchParams.set('entry.394418672', jsonData.pet_breed || '');
+    gformUrl2.searchParams.set('entry.1935542016', jsonData.pet_weight || '');
+    gformUrl2.searchParams.set('entry.554968216', jsonData.pet_sex || '');
+    gformUrl2.searchParams.set('entry.1548417476', jsonData.pet_notes || '');
+    gformUrl2.searchParams.set('entry.1305505566', jsonData.membresia_cliente || '');
+
     // Mostrar pantalla de éxito
     form.closest('.form-section').style.display = 'none';
     document.getElementById('successScreen').style.display = 'block';
     document.querySelector('.selector-card').style.display = 'none';
+
+    const gformBtns2 = document.querySelectorAll('a[href*="1FAIpQLSd"]');
+    gformBtns2.forEach(btn => btn.href = gformUrl2.toString());
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    
-    // Enviar a Google Forms + Sheets en background
-    submitToGoogleForms(jsonData);
-    fetch(SHEETS_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(jsonData)
-    }).catch(() => {});
+    setTimeout(() => { window.open(gformUrl2.toString(), '_blank'); }, 2000);
   });
 </script>
 </body>
