@@ -162,6 +162,34 @@
     .page { padding: 2rem 1rem 3rem; }
     .perks-grid { grid-template-columns: 1fr; }
   }
+
+  /* SELECTOR DE SERVICIOS ELEGANTE */
+  .service-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 0.5rem; }
+  .service-card {
+    border: 0.5px solid var(--border); border-radius: 10px;
+    padding: 16px 12px; cursor: pointer; text-align: center;
+    background: var(--surface2); transition: all 0.25s; position: relative;
+  }
+  .service-card:hover { border-color: var(--gold-dim); background: rgba(201,162,39,0.05); transform: translateY(-2px); }
+  .service-card.selected { border-color: var(--gold); background: rgba(201,162,39,0.10); }
+  .service-card input[type="radio"] { display: none; }
+  .service-icon { font-size: 28px; margin-bottom: 8px; }
+  .service-name { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; color: var(--gold); text-transform: uppercase; margin-bottom: 4px; }
+  .service-num { font-size: 9px; color: var(--gold-dim); letter-spacing: 1px; margin-bottom: 6px; }
+  .service-detail { font-size: 10px; color: var(--text-muted); line-height: 1.4; }
+  .service-check-dot { width: 14px; height: 14px; border: 1px solid var(--border); border-radius: 50%; margin: 8px auto 0; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
+  .service-card.selected .service-check-dot { background: var(--gold); border-color: var(--gold); }
+  .service-card.selected .service-check-dot::after { content: "✓"; font-size: 8px; color: #000; font-weight: 800; }
+  .service-sub { margin-top: 10px; display: none; }
+  .service-sub.visible { display: block; animation: fadeUp 0.3s ease both; }
+  .service-sub-title { font-size: 10px; letter-spacing: 2px; color: var(--gold-dim); text-transform: uppercase; margin-bottom: 8px; font-weight: 600; }
+  .service-option { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border: 0.5px solid var(--border); border-radius: 6px; margin-bottom: 6px; cursor: pointer; transition: all 0.2s; }
+  .service-option:hover { border-color: var(--gold-dim); }
+  .service-option.selected { border-color: var(--gold); background: rgba(201,162,39,0.07); }
+  .service-option input[type="radio"] { display: none; }
+  .service-option-dot { width: 12px; height: 12px; border: 1px solid var(--border); border-radius: 50%; flex-shrink: 0; transition: all 0.2s; }
+  .service-option.selected .service-option-dot { background: var(--gold); border-color: var(--gold); }
+  .service-option-label { font-size: 12px; color: var(--text-muted); }
 </style>
 </head>
 <body>
@@ -251,31 +279,39 @@
           <div class="field"><label>Color de pelaje</label><input type="text" name="pet_color" placeholder="Blanco"></div>
           <div class="field full"><label>Estilo de corte preferido</label><input type="text" name="pet_cut" placeholder="Corte cachorro, largo en orejas…"></div>
           <div class="field full"><label>Condición especial / Notas</label><textarea name="pet_notes" placeholder="Alergias, medicamentos, comportamiento especial…"></textarea></div>
-          <div class="field full"><label>Servicio de interés</label>
-            <select name="appointment_service">
-              <option value="">Seleccionar servicio</option>
-              <optgroup label="I · Peluquería Premium">
-                <option>Peluquería Premium — Grooming completo (baño, corte y secado)</option>
-                <option>Peluquería Premium — Baño y secado</option>
-                <option>Peluquería Premium — Corte únicamente</option>
-                <option>Peluquería Premium — Tratamiento de pelaje</option>
-                <option>Peluquería Premium — Corte de uñas</option>
-              </optgroup>
-              <optgroup label="II · Boutique & Accesorios">
-                <option>Boutique & Accesorios — Asesoría y compra</option>
-                <option>Boutique & Accesorios — Entrega de pedido</option>
-              </optgroup>
-              <optgroup label="III · Dog Walking">
-                <option>Dog Walking — Paseo 1h 30min</option>
-                <option>Dog Walking — Paseo grupal</option>
-              </optgroup>
-              <optgroup label="IV · Boarding">
-                <option>Boarding — Por noche</option>
-                <option>Boarding — Fin de semana</option>
-                <option>Boarding — Por semana</option>
-                <option>Boarding — Personalizado</option>
-              </optgroup>
-            </select>
+          <div class="field full">
+            <label>Servicio de interés</label>
+            <input type="hidden" name="appointment_service" id="service_hidden_reg">
+            <div class="service-grid">
+              <div class="service-card" id="svc_reg_1" onclick="selectService('reg','1')">
+                <div class="service-icon">✂️</div>
+                <div class="service-num">I</div>
+                <div class="service-name">Peluquería Premium</div>
+                <div class="service-detail">Grooming · Baño · Corte · Spa</div>
+                <div class="service-check-dot" id="sdot_reg_1"></div>
+              </div>
+              <div class="service-card" id="svc_reg_2" onclick="selectService('reg','2')">
+                <div class="service-icon">🛍️</div>
+                <div class="service-num">II</div>
+                <div class="service-name">Boutique & Accesorios</div>
+                <div class="service-detail">Productos · Accesorios · Moda</div>
+                <div class="service-check-dot" id="sdot_reg_2"></div>
+              </div>
+              <div class="service-card" id="svc_reg_3" onclick="selectService('reg','3')">
+                <div class="service-icon">🐕</div>
+                <div class="service-num">III</div>
+                <div class="service-name">Dog Walking</div>
+                <div class="service-detail">Paseos seguros · 90 min</div>
+                <div class="service-check-dot" id="sdot_reg_3"></div>
+              </div>
+              <div class="service-card" id="svc_reg_4" onclick="selectService('reg','4')">
+                <div class="service-icon">🏡</div>
+                <div class="service-num">IV</div>
+                <div class="service-name">Boarding</div>
+                <div class="service-detail">Hospedaje con amor y cuidado</div>
+                <div class="service-check-dot" id="sdot_reg_4"></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -443,31 +479,39 @@
           <div class="field full"><label>Indicaciones especiales para esta cita <span style="color:var(--gold-dim);font-size:9px;">(opcional)</span></label>
             <textarea name="pet_notes" placeholder="Corte más corto esta vez, está sensible en las patas…"></textarea>
           </div>
-          <div class="field full"><label>Servicio solicitado</label>
-            <select name="appointment_service" required>
-              <option value="">Seleccionar servicio</option>
-              <optgroup label="I · Peluquería Premium">
-                <option>Peluquería Premium — Grooming completo (baño, corte y secado)</option>
-                <option>Peluquería Premium — Baño y secado</option>
-                <option>Peluquería Premium — Corte únicamente</option>
-                <option>Peluquería Premium — Tratamiento de pelaje</option>
-                <option>Peluquería Premium — Corte de uñas</option>
-              </optgroup>
-              <optgroup label="II · Boutique & Accesorios">
-                <option>Boutique & Accesorios — Asesoría y compra</option>
-                <option>Boutique & Accesorios — Entrega de pedido</option>
-              </optgroup>
-              <optgroup label="III · Dog Walking">
-                <option>Dog Walking — Paseo 1h 30min</option>
-                <option>Dog Walking — Paseo grupal</option>
-              </optgroup>
-              <optgroup label="IV · Boarding">
-                <option>Boarding — Por noche</option>
-                <option>Boarding — Fin de semana</option>
-                <option>Boarding — Por semana</option>
-                <option>Boarding — Personalizado</option>
-              </optgroup>
-            </select>
+          <div class="field full">
+            <label>Servicio solicitado</label>
+            <input type="hidden" name="appointment_service" id="service_hidden_cita">
+            <div class="service-grid">
+              <div class="service-card" id="svc_cita_1" onclick="selectService('cita','1')">
+                <div class="service-icon">✂️</div>
+                <div class="service-num">I</div>
+                <div class="service-name">Peluquería Premium</div>
+                <div class="service-detail">Grooming · Baño · Corte · Spa</div>
+                <div class="service-check-dot" id="sdot_cita_1"></div>
+              </div>
+              <div class="service-card" id="svc_cita_2" onclick="selectService('cita','2')">
+                <div class="service-icon">🛍️</div>
+                <div class="service-num">II</div>
+                <div class="service-name">Boutique & Accesorios</div>
+                <div class="service-detail">Productos · Accesorios · Moda</div>
+                <div class="service-check-dot" id="sdot_cita_2"></div>
+              </div>
+              <div class="service-card" id="svc_cita_3" onclick="selectService('cita','3')">
+                <div class="service-icon">🐕</div>
+                <div class="service-num">III</div>
+                <div class="service-name">Dog Walking</div>
+                <div class="service-detail">Paseos seguros · 90 min</div>
+                <div class="service-check-dot" id="sdot_cita_3"></div>
+              </div>
+              <div class="service-card" id="svc_cita_4" onclick="selectService('cita','4')">
+                <div class="service-icon">🏡</div>
+                <div class="service-num">IV</div>
+                <div class="service-name">Boarding</div>
+                <div class="service-detail">Hospedaje con amor y cuidado</div>
+                <div class="service-check-dot" id="sdot_cita_4"></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -669,6 +713,42 @@
   let tcRegChecked = false, photosRegChecked = false;
   let tcCitaChecked = false, cancelCitaChecked = false;
   let planRegOk = false;
+
+
+  // ── Selector de servicios ─────────────────────────
+  const SERVICE_URLS = {
+    '1': 'https://cal.com/royalpaw-royalpaw-nyu6cz/cita-royal-paw',
+    '2': 'https://cal.com/royalpaw-royalpaw-nyu6cz/iv.-boutique-y-accesorios',
+    '3': 'https://cal.com/royalpaw-royalpaw-nyu6cz/ii.-paseo-de-perros',
+    '4': 'https://cal.com/royalpaw-royalpaw-nyu6cz/iii.-hospedaje'
+  };
+  const SERVICE_NAMES = {
+    '1': 'I · Peluquería Premium',
+    '2': 'II · Boutique & Accesorios',
+    '3': 'III · Dog Walking',
+    '4': 'IV · Boarding'
+  };
+
+  function selectService(form, num) {
+    ['1','2','3','4'].forEach(n => {
+      const card = document.getElementById('svc_' + form + '_' + n);
+      const dot = document.getElementById('sdot_' + form + '_' + n);
+      if (card) card.classList.remove('selected');
+      if (dot) dot.classList.remove('selected');
+    });
+    const sel = document.getElementById('svc_' + form + '_' + num);
+    const dot = document.getElementById('sdot_' + form + '_' + num);
+    if (sel) sel.classList.add('selected');
+    if (dot) dot.classList.add('selected');
+    const hidden = document.getElementById('service_hidden_' + form);
+    if (hidden) hidden.value = SERVICE_NAMES[num];
+
+    // Update Cal.com buttons with selected service URL
+    const calUrl = SERVICE_URLS[num];
+    document.querySelectorAll('a[href*="cal.com/royalpaw"]').forEach(a => {
+      if (!a.closest('#successScreen')) a.href = calUrl;
+    });
+  }
 
   // ── Selector de tipo ──────────────────────────
   function selectTipo(tipo) {
